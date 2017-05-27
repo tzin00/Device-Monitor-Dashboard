@@ -1,19 +1,31 @@
-FROM httpd:2.4.25-alpine
-#Install Python
-RUN apk add --no-cache python && \
-    python -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip install --upgrade pip setuptools && \
-    rm -r /root/.cache
-#Change Working directory    
-WORKDIR /usr/local/apache2/htdocs/
-#Delete existing files to be able to clone
-RUN rm -f /usr/local/apache2/htdocs/index.html
-#Clone Project
-COPY . /usr/local/apache2/htdocs
-#Start Cron Service
-RUN crond && \
-#Create Cron Job
-(crontab -l 2>/dev/null; echo "*/5 * * * * cd /usr/local/apache2/htdocs/ && /usr/bin/python report.py &> /dev/null") | crontab -
-#Generate Initial Report
-RUN python /usr/local/apache2/htdocs/report.py
+FROM python:3.6-alpine
+
+# Add curl for automatic reporting
+RUN apk add --update curl && \
+    rm -rf /var/cache/apk/*
+
+# Create the cron job to run every 5 minutes
+COPY run_report /bin/runreport
+RUN chmod +x /bin/runreport
+RUN (crontab -l && echo "*/5 * * * * /bin/runreport > /dev/null 2&>1") | crontab -
+
+# install requirements
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy files to the container
+RUN mkdir /dashboard/
+COPY . /dashboard/
+WORKDIR /dashboard/
+EXPOSE 8000
+
+# Sets production config mode
+ENV FLASK_CONFIG="production"
+
+# Create the empty database
+RUN python manage.py setup
+
+RUN crond
+
+# Startup the cron service and gunicorn
+CMD ["gunicorn", "-c", "gunicorn_conf.py", "manage:app"]
