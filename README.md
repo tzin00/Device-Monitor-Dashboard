@@ -29,8 +29,6 @@ Original design and concept by circa10a can be found [here](https://github.com/c
 - Click run report to ping all devices right now.
 - If you would like auto reporting, set the 'run_report' script on a cron job. Alternatively, sending an empty POST request to [hostname]:8000/check-devices will poll all devices. 
 
-## Known Issues
-- Cron job is not properly running for docker containers.
 
 ## Screenshots
 ![alt text](http://i.imgur.com/gbmsw9T.jpg)
