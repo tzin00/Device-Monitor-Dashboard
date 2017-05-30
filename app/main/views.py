@@ -30,6 +30,9 @@ def index():
         else:
             port = form.port.data
         host_data = (form.fqdn.data, port)
+        verify = check_duplicates(host_data)
+        if verify is None:
+            return redirect(url_for('main.index'))
         status, rsp_time = report.check_host(host_data)
         host = Hosts(fqdn=form.fqdn.data, port=port, friendly_name=form.friendly_name.data,
                      status=status)
