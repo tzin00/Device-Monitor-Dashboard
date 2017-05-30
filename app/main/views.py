@@ -16,10 +16,10 @@ def index():
     form2 = ImportForm()
     hosts = Hosts.query.order_by(Hosts.status.asc()).all()
     if len(hosts) == 0:
-        now = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+        now = datetime.now().strftime('%m/%d/%Y %I:%M:%S %Z')
         perc_up = 0
     else:
-        now = datetime.strftime(hosts[0].last_checked, '%m/%d/%Y %H:%M:%S')
+        now = datetime.strftime(hosts[0].last_checked, '%m/%d/%Y %I:%M:%S %Z')
         total_hosts = len(hosts)
         up_hosts = len(Hosts.query.filter_by(status=True).all())
         perc_up = up_hosts / total_hosts

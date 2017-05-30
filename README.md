@@ -15,10 +15,8 @@ Original design and concept by circa10a can be found [here](https://github.com/c
 - Server will be available on [hostname]:8000
 
 ## Docker setup
-- Clone the git repository
-- Build the docker image: `docker build -t myrepo/simple-monitor .`
-- Run the container: `docker run --name simple-monitor -p 8000:8000 myrepo/simple-monitor`
-- Access the container at [hostname]:8000
+- `docker pull shaggyloris/simple_monitor`
+- `docker run -d -p 8000:8000 shaggyloris/simple_monitor`
 
 ## Managing the server:
 - Click the 'Add Device' button to add a new host
