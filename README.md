@@ -5,6 +5,9 @@ A python based web app to monitor tcp/icmp status to servers, network gear, or a
 
 Original design and concept by circa10a can be found [here](https://github.com/circa10a/Device-Monitor-Dashboard).
 
+## Changelog
+- (05/30/2017) - Added ability to import devices with a csv file.
+
 ## Regular Setup
 - Clone the git repository
 - (recommended) setup a virtual environment.
@@ -19,14 +22,37 @@ Original design and concept by circa10a can be found [here](https://github.com/c
 - `docker run -d -p 8000:8000 shaggyloris/simple_monitor`
 
 ## Managing the server:
-- Click the 'Add Device' button to add a new host
-  - If no port is specified, ICMP pings will be used
-  - If a friendly name is provided, the dashboard will display that. If no friendly name is provided, the dashboard will display the fqdn + the port or PING if no port provided. 
-- When adding a new device via the add device button, the device will be first be checked at that time. 
-- Failed devices will always be at the top. 
-- To delete or edit a device, click the manage devices link and click the host tabs. 
-- Click run report to ping all devices right now.
-- If you would like auto reporting, set the 'run_report' script on a cron job. Alternatively, sending an empty POST request to [hostname]:8000/check-devices will poll all devices. 
+- To add a single device:
+  - Click 'Add Device' button on the nav bar
+  - Enter the FQDN or IP address of the host
+  - (Optional) Enter the port number to check. If no port is provided, PING will be used.
+  - (Optional) Enter a friendly name for the host. This will be displayed on the report instead of the fqdn/port number.
+- To import devices
+  - Create a csv file in the following format:
+    - FQDN/IP, port number, friendly name
+  - Click the 'Import Devices' button on the nav bar
+  - Click Choose File and browse to the CSV file
+  - Click submit
+  - When the devices are submitted, each device will have an initial test to check status. Depending on how many devices are added, the processing may take a few moments.
+- To manually run a report on all hosts in the database, click 'run report'.
+- To edit or delete a host
+  - Click 'manage devices'
+  - Click 'Hosts' under the nav bar.
+  - You can edit the fqdn, port number, and friendly name by clicking on the corresponding field. Alternatively, you can click on the pencil icon.
+  - To delete hosts either check the boxes of the hosts you would like to delete, then click 'With selected > delete' or click the trash can next to a host name.
+- Changing configurations
+  - To modify the port number used for the web server:
+    - If using gunicorn: In the gunicorn_conf.py file, modify the bind variable.
+    - If using the flask development server, run the command: `python manage.py runserver -p [new port number]`
+    
+## Automating the report
+
+
+By default, the report will have to be triggered manually by clicking the Run Report link. To have the report run automatically, you can send an empty post request to [hostname]:8000/check-hosts. 
+
+If using linux, you can use the run_report script included in the repo on a cron job. 
+
+###### Note: The Docker image already creates the cron job to run every 5 minutes. 
 
 
 ## Screenshots
