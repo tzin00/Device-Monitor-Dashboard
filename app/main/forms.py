@@ -1,4 +1,6 @@
+import csv
 from flask_wtf import FlaskForm as Form
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from wtforms import ValidationError
@@ -17,3 +19,8 @@ class HostForm(Form):
                 int(field.data)
             except ValueError:
                 raise ValidationError('Port provided is not valid')
+
+
+class ImportForm(Form):
+    file = FileField('Hosts', validators=[FileRequired(), FileAllowed(['csv'], 'Only CSV is supported!')])
+    submit = SubmitField('Submit')

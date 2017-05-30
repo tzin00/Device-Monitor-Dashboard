@@ -1,3 +1,4 @@
+from datetime import datetime
 from . import db
 
 
@@ -8,7 +9,7 @@ class Hosts(db.Model):
     port = db.Column(db.Integer, default=None, nullable=True)
     friendly_name = db.Column(db.String())
     status = db.Column(db.Boolean, default=False)
-    last_checked = db.Column(db.DateTime)
+    last_checked = db.Column(db.DateTime, default=datetime.now())
     
     def __repr__(self):
         return '<Host {0}>'.format(self.fqdn)

@@ -7,10 +7,11 @@ Original design and concept by circa10a can be found [here](https://github.com/c
 
 ## Regular Setup
 - Clone the git repository
-- (recommended) setup a virtual environment with either python2.7 or 3.6
-- Install dependencies
-- Setup the database: `python manage.py setup`
+- (recommended) setup a virtual environment.
+- Install dependencies in requirments.txt
+- Setup the the database/folders: `python manage.py setup`
 - Run the web server `gunicorn -c gunicorn_conf.py manage:app`
+  - ###### Note: Gunicorn is not required, but is recommended over the default flask webserver. 
 - Server will be available on [hostname]:8000
 
 ## Docker setup

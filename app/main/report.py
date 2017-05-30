@@ -5,7 +5,7 @@ import subprocess
 import platform
 import socket
 from datetime import datetime
-
+from time import time
 from .. import db
 from ..models import Hosts
 
@@ -16,11 +16,13 @@ def check_host(host):
     """
     fqdn, port = host
     if port is None:
+        st = time()
         test = ping_host(fqdn)
     else:
+        st = time()
         test = check_sock(fqdn, port)
-    timestamp = datetime.now()
-    return test, timestamp
+    rsp_time = float('{:0.2f}'.format(time() - st))
+    return test, rsp_time
 
 
 def check_hosts():
